@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMSI MyManager - Connexion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logo-emsi.png">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo-container">
+                    <img src="logo-emsi.png" alt="EMSI Logo" class="login-logo">
+                </div>
+                <h1 class="login-title" data-i18n="login.title">EMSI Moulay Youssef</h1>
+                <p class="login-subtitle" data-i18n="login.subtitle">Backoffice MyManager</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username" data-i18n="login.username">
+                        <i class="fas fa-user"></i> Nom d'utilisateur
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" required 
+                               data-i18n-placeholder="login.username" placeholder="admin">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" data-i18n="login.password">
+                        <i class="fas fa-lock"></i> Mot de passe
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required 
+                               data-i18n-placeholder="login.password" placeholder="••••••••">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginLang" data-i18n="login.language">
+                        <i class="fas fa-globe"></i> Langue
+                    </label>
+                    <select id="loginLang" class="form-select">
+                        <option value="fr">Français</option>
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-i18n="login.button">Se connecter</span>
+                </button>
+                
+                <div id="loginError" class="error-message" data-i18n="login.error"></div>
+            </form>
+            
+            <div class="login-footer">
+                <p data-i18n="login.footer">
+                    <i class="fas fa-copyright"></i> 2024 EMSI Moulay Youssef - Tous droits réservés
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="i18n.js"></script>
+    <script>
+        // Initialize language
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('language') || 'fr';
+            i18n.setLanguage(savedLang);
+            
+            // Set select value
+            const langSelect = document.getElementById('loginLang');
+            if (langSelect) {
+                langSelect.value = savedLang;
+            }
+        });
+        
+        // Language selector
+        document.getElementById('loginLang').addEventListener('change', function() {
+            const lang = this.value;
+            i18n.setLanguage(lang);
+        });
+        
+        // Login logic
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('loginError');
+            
+            if (!username || !password) {
+                errorDiv.textContent = i18n.t('login.error');
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (username === 'admin' && password === 'admin') {
+                document.querySelector('.login-card').style.transform = 'translateY(-20px)';
+                errorDiv.style.display = 'none';
+                
+                localStorage.removeItem('loginError');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', username);
+                
+                window.location.href = 'dashboard.html';
+            } else {
+                errorDiv.textContent = i18n.t('login.error');
+                errorDiv.style.display = 'block';
+                
+                localStorage.setItem('loginError', 'Invalid credentials');
+                document.querySelector('.login-card').style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    document.querySelector('.login-card').style.animation = '';
+                }, 500);
+            }
+        });
+        
+        // Auto-focus
+        document.getElementById('username').focus();
+        
+        // Show saved error
+        const savedError = localStorage.getItem('loginError');
+        if (savedError) {
+            document.getElementById('loginError').textContent = i18n.t('login.error');
+            document.getElementById('loginError').style.display = 'block';
+            localStorage.removeItem('loginError');
+        }
+    </script>
+</body>
+</html>

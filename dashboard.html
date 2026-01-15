@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMSI MyManager - Tableau de Bord</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logo-emsi.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <button id="sidebarToggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <img src="logo-emsi.png" alt="EMSI Logo" class="navbar-logo">
+            <span class="navbar-title" data-i18n="navbar.title">EMSI Moulay Youssef</span>
+        </div>
+        
+        <div class="navbar-actions">
+            <div class="dropdown">
+                <button class="dropdown-toggle">
+                    <i class="fas fa-globe"></i>
+                    <span id="currentLang">FR</span>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" data-lang="fr"><i class="fas fa-flag"></i> Français</a>
+                    <a href="#" data-lang="ar"><i class="fas fa-flag"></i> العربية</a>
+                    <a href="#" data-lang="en"><i class="fas fa-flag"></i> English</a>
+                </div>
+            </div>
+            
+            <button id="logoutBtn" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="navbar.logout">Déconnexion</span>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-menu">
+            <a href="#dashboard" class="sidebar-item active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i>
+                <span data-i18n="sidebar.dashboard">Tableau de bord</span>
+            </a>
+            
+            <a href="#students" class="sidebar-item" data-page="students">
+                <i class="fas fa-user-graduate"></i>
+                <span data-i18n="sidebar.students">Étudiants</span>
+            </a>
+            
+            <a href="#teachers" class="sidebar-item" data-page="teachers">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span data-i18n="sidebar.teachers">Professeurs</span>
+            </a>
+            
+            <a href="#courses" class="sidebar-item" data-page="courses">
+                <i class="fas fa-book"></i>
+                <span data-i18n="sidebar.courses">Cours</span>
+            </a>
+            
+            <a href="#departments" class="sidebar-item" data-page="departments">
+                <i class="fas fa-building"></i>
+                <span data-i18n="sidebar.departments">Départements</span>
+            </a>
+            
+            <a href="#absences" class="sidebar-item" data-page="absences">
+                <i class="fas fa-calendar-times"></i>
+                <span data-i18n="sidebar.absences">Absences</span>
+            </a>
+            
+            <a href="#schedule" class="sidebar-item" data-page="schedule">
+                <i class="fas fa-calendar-alt"></i>
+                <span data-i18n="sidebar.schedule">Emploi du temps</span>
+            </a>
+            
+            <a href="#rooms" class="sidebar-item" data-page="rooms">
+                <i class="fas fa-door-open"></i>
+                <span data-i18n="sidebar.rooms">Salles</span>
+            </a>
+            
+            <!-- Déconnexion en bas de la sidebar -->
+            <div class="sidebar-item logout-item" id="sidebarLogout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span data-i18n="sidebar.logout">Déconnexion</span>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Dashboard View -->
+        <div id="dashboardView" class="page-content active">
+            <h1 data-i18n="dashboard.title">Tableau de bord</h1>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card clickable-card" onclick="showPage('students')">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalStudents">0</h3>
+                        <p data-i18n="dashboard.students">Étudiants</p>
+                        <div class="stat-hint" data-i18n="dashboard.clickToView">Cliquez pour voir la liste</div>
+                    </div>
+                    <div class="stat-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card clickable-card" onclick="showPage('teachers')">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalTeachers">0</h3>
+                        <p data-i18n="dashboard.teachers">Professeurs</p>
+                        <div class="stat-hint" data-i18n="dashboard.clickToView">Cliquez pour voir la liste</div>
+                    </div>
+                    <div class="stat-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card clickable-card" onclick="showPage('courses')">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalCourses">0</h3>
+                        <p data-i18n="dashboard.courses">Cours</p>
+                        <div class="stat-hint" data-i18n="dashboard.clickToView">Cliquez pour voir la liste</div>
+                    </div>
+                    <div class="stat-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card clickable-card" onclick="showPage('departments')">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalDepartments">0</h3>
+                        <p data-i18n="dashboard.departments">Départements</p>
+                        <div class="stat-hint" data-i18n="dashboard.clickToView">Cliquez pour voir la liste</div>
+                    </div>
+                    <div class="stat-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card clickable-card" onclick="showPage('absences')">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                        <i class="fas fa-calendar-times"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalAbsences">0</h3>
+                        <p data-i18n="dashboard.absences">Absences</p>
+                        <div class="stat-hint" data-i18n="dashboard.clickToView">Cliquez pour voir la liste</div>
+                    </div>
+                    <div class="stat-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card clickable-card" onclick="showPage('rooms')">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #20c997 0%, #17a589 100%);">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="availableRooms">0</h3>
+                        <p data-i18n="dashboard.rooms">Salles</p>
+                        <div class="stat-hint" data-i18n="dashboard.clickToView">Cliquez pour voir la liste</div>
+                    </div>
+                    <div class="stat-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 data-i18n="dashboard.studentsDistribution">Répartition des Étudiants</h3>
+                    <canvas id="studentsChart"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 data-i18n="dashboard.coursesByDepartment">Cours par Département</h3>
+                    <canvas id="coursesChart"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 data-i18n="dashboard.monthlyAbsences">Absences Mensuelles</h3>
+                    <canvas id="absencesChart"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 data-i18n="dashboard.roomsStatus">État des Salles</h3>
+                    <canvas id="roomsChart"></canvas>
+                </div>
+                
+                <div class="chart-card full-width">
+                    <h3 data-i18n="dashboard.weeklySchedule">Occupation Hebdomadaire</h3>
+                    <canvas id="scheduleChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Students View -->
+        <div id="studentsView" class="page-content"></div>
+        
+        <!-- Teachers View -->
+        <div id="teachersView" class="page-content"></div>
+        
+        <!-- Courses View -->
+        <div id="coursesView" class="page-content"></div>
+        
+        <!-- Departments View -->
+        <div id="departmentsView" class="page-content"></div>
+        
+        <!-- Absences View -->
+        <div id="absencesView" class="page-content"></div>
+        
+        <!-- Schedule View -->
+        <div id="scheduleView" class="page-content"></div>
+        
+        <!-- Rooms View -->
+        <div id="roomsView" class="page-content"></div>
+    </main>
+    
+    <!-- Modal for Add/Edit -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content modal-small">
+            <h3 data-i18n="modal.confirmation">Confirmation</h3>
+            <p id="confirmMessage" data-i18n="modal.confirmDelete">Êtes-vous sûr de vouloir supprimer cet élément ?</p>
+            <div class="modal-actions">
+                <button id="confirmYes" class="btn btn-danger">
+                    <i class="fas fa-check"></i> <span data-i18n="button.yes">Oui</span>
+                </button>
+                <button id="confirmNo" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> <span data-i18n="button.no">Non</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts ORDER IS IMPORTANT -->
+    <script src="i18n.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+    <script src="fonction.js"></script>
+</body>
+</html>
